@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<record id="module_category_library" model="ir.module.category">
+    <field name="name">Library</field>
+    <field name="sequence">10</field>
+</record>
+
+<record id="group_library_librarian" model="res.groups">
+    <field name="name">Librarian</field>
+    <field name="category_id" ref="library_security.module_category_library"/>
+</record>
+
+</odoo>

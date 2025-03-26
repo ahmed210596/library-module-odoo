@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View for Library Books -->
+    <record id="view_library_book_tree" model="ir.ui.view">
+        <field name="name">library.book.tree</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="state == 'borrowed'">
+                <field name="name"/>
+                <field name="author"/>
+                 <field name="late_fees"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'available'"
+                       decoration-warning="state == 'borrowed'"
+                       decoration-info="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Library Books -->
+ <record id="view_library_book_form" model="ir.ui.view">
+    <field name="name">library.book.form</field>
+    <field name="model">library.book</field>
+    <field name="arch" type="xml">
+        <form string="Library Book">
+        <header>
+                <!-- Default buttons (Save/Discard) are automatically included -->
+                <!-- Add your custom buttons here -->
+                <button name="borrow_book_action" string="Borrow" type="object"
+                        attrs="{'invisible': [('state', '!=', 'available')]}"
+                        class="oe_highlight"/>  <!-- Use classes like oe_highlight for styling -->
+                <button name="return_book" string="Return" type="object"
+                        attrs="{'invisible': [('state', '!=', 'borrowed')]}"
+                        class="btn-secondary"/>
+            </header>
+            <sheet>
+                <!-- Buttons placed in a button box within the sheet -->
+               
+                <group>
+                    <field name="name"/>
+                    <field name="author"/>
+                    <field name="state"/>
+                     
+                </group>
+                <notebook>
+                    <page string="Borrowing Details">
+                        <group>
+                            <field name="borrower_id"/>
+                            <field name="borrow_date"/>
+                            <field name="return_date"/>
+                        </group>
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+    <!-- Search View for Library Books -->
+    <record id="view_library_book_search" model="ir.ui.view">
+        <field name="name">library.book.search</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="author"/>
+                <filter name="available_books" string="Available" domain="[('state', '=', 'available')]"/>
+                <filter name="borrowed_books" string="Borrowed" domain="[('state', '=', 'borrowed')]"/>
+                <!-- Filter to show books that have a category assigned -->
+                <filter name="category_filter" string="With Category" domain="[('category_id', '!=', False)]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

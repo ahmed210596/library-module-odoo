@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Form View for the Dialog -->
+    <record id="view_library_book_review_form" model="ir.ui.view">
+        <field name="name">library.book.review.form</field>
+        <field name="model">library.book.review</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="book_id"/>
+                        <field name="user_id"/>
+                        <field name="rating" required="1"/>
+                        <field name="review_text"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Submit Review" type="object" special="save" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dialog Action -->
+    <record id="action_library_book_review_dialog" model="ir.actions.act_window">
+        <field name="name">New Review (Dialog)</field>
+        <field name="res_model">library.book.review</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_library_book_review_form"/>
+    </record>
+<menuitem 
+            id="menu_library_create_reviews" 
+            name=" create Reviews" 
+            parent="library_menu_root" 
+            action="action_library_book_review_dialog"
+        />
+    <!-- Tree View with Custom Create Button -->
+    <record id="view_library_book_review_tree" model="ir.ui.view">
+        <field name="name">library.book.review.tree</field>
+        <field name="model">library.book.review</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree create="0">
+                <!-- <header>
+                    
+                    <button 
+                        string="Create Review" 
+                        type="action" 
+                        name="%(library_module.action_library_book_review_dialog)d"
+                        class="oe_highlight"
+                    />
+                </header> -->
+                <field name="book_id"/>
+                <field name="user_id"/>
+                <field name="rating"/>
+                <field name="review_text"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

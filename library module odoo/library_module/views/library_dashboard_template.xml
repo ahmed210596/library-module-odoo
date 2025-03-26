@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="library_module.LibraryDashboardTemplate">
+        <div class="library_dashboard">
+            <h1>Library Dashboard</h1>
+            <canvas id="myChart"></canvas>
+        </div>
+    </t>
+</templates>

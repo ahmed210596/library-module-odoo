@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_library_book_tree_inherit_librarian" model="ir.ui.view">
+        <field name="name">library.book.form.inherit.librarian</field>
+        <field name="model">library.book</field>
+        <field name="inherit_id" ref="library_module.view_library_book_form"/>
+        <field name="arch" type="xml">
+            <!-- Control Borrow button -->
+            <xpath expr="//button[@name='borrow_book_action']" position="attributes">
+                <attribute name="groups">library_security.group_library_librarian</attribute>
+            </xpath>
+
+            <!-- Control Return button -->
+            <xpath expr="//button[@name='return_book']" position="attributes">
+                <attribute name="groups">library_security.group_library_librarian</attribute>
+            </xpath>
+             <xpath expr="//notebook" position="attributes">
+            <attribute name="groups">library_security.group_library_librarian</attribute>
+        </xpath>
+        </field>
+    </record>
+</odoo>

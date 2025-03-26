@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+
+        <!-- Define the model for library.book (if not already defined) -->
+        <record id="model_library_book" model="ir.model">
+            <field name="name">Library Book</field>
+            <field name="model">library.book</field>
+        </record>
+
+        <!-- Define the email template -->
+        <record id="book_borrowed_notification_template" model="mail.template">
+            <field name="name">Book Overdue Notification</field>
+            <field name="subject">Your Book Borrowing Details</field>
+            <field name="email_from">${user.email}</field>
+            <field name="email_to">${object.borrower_id.email}</field>
+            <field name="body_html">
+                 <![CDATA[
+        <p>Dear ${object.borrower_id.name},</p>
+        <p>This is a reminder that the book <strong>${object.name}</strong> you borrowed is overdue.</p>
+        <p><strong>Return Date:</strong> ${object.return_date}</p>
+        <p>Please return the book as soon as possible to avoid more late fees.</p>
+    ]]>
+            </field>
+            <field name="model_id" ref="model_library_book"/>
+        </record>
+
+    </data>
+</odoo>
+

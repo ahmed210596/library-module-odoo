@@ -1,0 +1,292 @@
+<odoo>
+    <template id="report_library_book_document">
+        <t t-call="web.html_container">
+            <!-- Custom layout instead of web.external_layout -->
+       <div class="header p-2 container">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <!-- Logo - Extreme Left -->
+        <div class="left-div" style="max-width: 200px; flex-shrink: 0;">
+            <img t-if="res_company.logo" 
+                 t-att-src="'/library_module/static/src/img/bookstore.jpg'" 
+                 class="img-fluid"
+                 style="max-height: 200px; width: auto;" 
+                 alt="Company Logo"/>
+        </div>
+
+        <!-- Company Details - Extreme Right -->
+        <div class="right-div text-end">
+            <h4 class="mb-0" t-field="res_company.name"></h4>
+            <div class="text-muted small">
+                <div t-field="res_company.street"></div>
+                <div t-if="res_company.street2">
+                    <span t-field="res_company.street2"></span>
+                </div>
+                <div>
+                    <span t-field="res_company.city"></span>, 
+                    <span t-if="res_company.state_id" t-field="res_company.state_id.name"></span>, 
+                    <span t-field="res_company.zip"></span>
+                </div>
+                <div t-field="res_company.country_id.name"></div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="mt-2 mb-1" style="border-top: 2px solid #4f46e5;"/>
+</div>
+
+
+
+
+
+
+          <div class="footer p-3">
+    <div class="row border-top pt-2 align-items-center">
+        <!-- Left-aligned -->
+        <div class="col-4 text-start">
+            <small class="text-muted">Library Management System</small>
+        </div>
+
+        <!-- Centered -->
+        <div class="col-4 text-center">
+            <span class="topage"></span>
+        </div>
+
+        <!-- Right-aligned -->
+        <div class="col-4 text-end">
+            <small class="text-muted">
+                   © <t t-esc="datetime.datetime.now().year"/> <t t-esc="res_company.name"/> - All rights reserved
+            </small>
+        </div>
+    </div>
+</div>
+
+
+            <div class="article">
+                <style>
+                    /* Base styles */
+                    .report-container {
+                        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+                        color: #374151;
+                    }
+                    /* Responsive table */
+                    .responsive-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                        border-radius: 0.5rem;
+                        overflow: hidden;
+                    }
+                    .responsive-table th {
+                        background-color: #4f46e5;
+                        color: #fff;
+                        padding: 1rem;
+                        text-align: left;
+                        font-weight: 600;
+                        letter-spacing: 0.05em;
+                        border-bottom: 2px solid #3730a3;
+                    }
+                    .responsive-table td {
+                        padding: 0.85rem 1rem;
+                        border-bottom: 1px solid #e5e7eb;
+                        overflow-wrap: break-word;
+                    }
+                    .responsive-table tbody tr:nth-child(even) {
+                        background-color: #f9fafb;
+                    }
+                    .responsive-table tbody tr:hover {
+                        background-color: #f3f4f6;
+                    }
+                    .responsive-table tbody tr:last-child td {
+                        border-bottom: none;
+                    }
+                    /* Status badges */
+                    .status-badge {
+                        padding: 0.4rem 0.75rem;
+                        border-radius: 2rem;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        display: inline-block;
+                        text-transform: capitalize;
+                    }
+                    .borrowed-status {
+                        background-color: #fef3c7;
+                        color: #92400e;
+                        border: 1px solid #f59e0b;
+                    }
+                    .available-status {
+                        background-color: #d1fae5;
+                        color: #065f46;
+                        border: 1px solid #10b981;
+                    }
+                    /* Report header */
+                    .report-header {
+                        margin-bottom: 2rem;
+                        text-align: center;
+                    }
+                    .report-title {
+                        color: #4f46e5;
+                        font-size: 2rem;
+                        font-weight: 700;
+                        margin-bottom: 0.5rem;
+                    }
+                    .report-subtitle {
+                        color: #6b7280;
+                        font-size: 1rem;
+                        margin-bottom: 1.5rem;
+                    }
+                    .report-meta {
+                        display: flex;
+                        justify-content: center;
+                        gap: 2rem;
+                        font-size: 0.875rem;
+                        color: #6b7280;
+                        margin-bottom: 1rem;
+                    }
+                    /* Report footer */
+                    .report-footer {
+                        margin-top: 2rem;
+                        text-align: right;
+                        font-size: 0.875rem;
+                        color: #6b7280;
+                    }
+                    /* Table wrapper for horizontal scrolling */
+                    .table-wrapper {
+                        overflow-x: auto;
+                        margin-bottom: 1rem;
+                    }
+                    /* Responsive adjustments */
+                    @media (max-width: 768px) {
+                        .responsive-table th,
+                        .responsive-table td {
+                            padding: 0.5rem;
+                            font-size: 0.875rem;
+                        }
+                        .status-badge {
+                            padding: 0.3rem 0.6rem;
+                            font-size: 0.75rem;
+                        }
+                        .report-meta {
+                            flex-direction: column;
+                            gap: 0.5rem;
+                        }
+                    }
+                    /* Print adjustments */
+                    @media print {
+                        .report-container {
+                            padding: 0;
+                        }
+                        .responsive-table th,
+                        .responsive-table td {
+                            padding: 0.6rem 0.8rem;
+                        }
+                    }
+                    /* Empty state */
+                    .empty-cell {
+                        text-align: center;
+                        color: #9ca3af;
+                        font-style: italic;
+                        background-color: #f9fafb;
+                        padding: 0.75rem !important;
+                    }
+                  
+                </style>
+
+                <div class="report-container p-4">
+                    <!-- Report Header -->
+                    <div class="report-header">
+                        <h1 class="report-title">Library Books Report</h1>
+                        <p class="report-subtitle">Complete inventory of all books and their current status</p>
+                        <div class="report-meta">
+                            <span>Generated: <t t-esc="datetime.datetime.now().strftime('%B %d, %Y at %H:%M')"/></span>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Report Content -->
+                    <div class="table-wrapper">
+                        <table class="responsive-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%">Book Title</th>
+                                    <th style="width: 20%">Author</th>
+                                    <th style="width: 12%">Status</th>
+                                    <th style="width: 15%">Borrower</th>
+                                    <th style="width: 12%">Borrowed</th>
+                                    <th style="width: 12%">Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="book">
+                                    <tr>
+                                        <td class="fw-bold"><t t-esc="book.name"/></td>
+                                        <td><t t-esc="book.author"/></td>
+                                        <td>
+                                            <span t-attf-class="status-badge {{ 'borrowed-status' if book.state == 'borrowed' else 'available-status' }}">
+                                                <t t-esc="book.state"/>
+                                            </span>
+                                        </td>
+                                        <t t-if="book.state == 'borrowed'">
+                                            <td><t t-esc="book.borrower_id.name"/></td>
+                                            <td><t t-esc="book.borrow_date"/></td>
+                                            <td><t t-esc="book.return_date"/></td>
+                                        </t>
+                                        <t t-if="book.state != 'borrowed'">
+                                            <td colspan="3" class="empty-cell">Not Currently Borrowed</td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Report Summary Section -->
+               <div class="row mt-5">
+    <div class="col-12">
+        <div class="bg-light rounded-3 p-3 p-md-4 shadow-sm">
+            <h4 class="text-primary mb-3">Report Summary</h4>
+            <hr/>
+            <div class="mb-2 d-flex justify-content-between">
+                <span>Total Books:</span>
+                <span class="badge bg-success">
+                    <t t-esc="len(docs)"/>
+                </span>
+            </div>
+            <div class="mb-2 d-flex justify-content-between">
+                <span>Available Books:</span>
+                <span class="badge bg-primary">
+                    <t t-esc="len([b for b in docs if b.state != 'borrowed'])"/>
+                </span>
+            </div>
+            <div class="mb-2 d-flex justify-content-between">
+                <span>Borrowed Books:</span>
+                <span class="badge bg-danger">
+                    <t t-esc="len([b for b in docs if b.state == 'borrowed'])"/>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                    <!-- Report Footer -->
+                    <div class="report-footer">
+                        <p>Report ID: LBR-<t t-esc="datetime.datetime.now().strftime('%Y%m%d%H%M')"/></p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <report
+        id="action_report_library_book"
+        model="library.book"
+        string="Library Books Report"
+        report_type="qweb-pdf"
+        name="library_module.report_library_book_document"
+        file="library_module.report_library_book_document"
+         print_report_name="'Library Books Report - %s' % (datetime.datetime.today().strftime('%Y-%m-%d'))"
+    />
+</odoo>
